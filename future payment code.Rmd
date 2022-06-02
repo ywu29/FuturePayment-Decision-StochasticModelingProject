@@ -1,0 +1,62 @@
+---
+title: "Assignment 3"
+author: "Team6"
+date: "11/20/2021"
+output: pdf_document
+---
+#Summary
+Problem:
+Approach:
+Recommendation:
+
+#Analysis
+
+##load library
+```{r}
+library(tidyverse)
+library(extraDistr)
+library(FinCal)
+library(glue)
+```
+
+##Alternative 1
+```{r }
+pv_opt1<- round(-pv(0.005,24,0,15000,0))
+glue('The expect value of the clients first proposal is {pv_opt1}.')
+```
+##Alternative 2
+```{r cars}
+pv_opt2_wbonus<--pv(0.005,24,1500000,-15000,0)
+pv_opt2_nobonus<-pv(0.005,24,0,15000,0)
+pv_opt2<- round(pv_opt2_nobonus*0.3+pv_opt2_wbonus*0.7)
+glue('The expected value of the clients second proposal is {pv_opt2}.')
+```
+
+##Alternative 3
+```{r }
+n <- 10000 
+simulation <- rtriang(n, a = 3200000, b = 12800000, c = 5600000)
+simulation_shareofsavings<-c()
+for (i in simulation){
+  if ( i < 4000000){
+    shareofsavings <- 0
+  } else if ( i < 6000000){
+    shareofsavings <- 0.2*(i-4000000)
+  } else if ( i < 8000000){
+    shareofsavings<-400000+0.4*(i-6000000)
+  } else {
+    shareofsavings<-1200000+0.6*(i-8000000)
+  }
+  simulation_shareofsavings<-c(shareofsavings,simulation_shareofsavings)
+}
+pv_shareofsaving<--pv(r=0.005,n=24,fv=mean(simulation_shareofsavings),pmt=0,type=0)
+pv_revenuebid<--pv(r=0.005,n=24,fv=0,pmt=10000,type=0)
+pv_opt3<-round((pv_shareofsaving+pv_revenuebid)*0.45+0*0.55)
+glue('The expected value of the clients third proposal is {pv_opt3}.')
+```
+# Illustration
+## put decision tree
+![wm](wm.png)
+
+# Conclusion
+
